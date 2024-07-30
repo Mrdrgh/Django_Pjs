@@ -12,11 +12,6 @@
 <body>
     {% include 'nav.html' %}
     <div>
-        {% if messages %}
-            {% for i in messages %}
-                {{ i }}
-            {% endfor %}
-        {% endif %}
         {% block somtn %}
         {% endblock %}
     </div>
