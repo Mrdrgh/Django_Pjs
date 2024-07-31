@@ -7,21 +7,22 @@ def home(req):
     if req.method == "POST":
         email = req.POST["email"]
         password = req.POST["password"]
-
-        user  = authenticate(req, email=email, password=password)
+        user  = authenticate(req, username=email, password=password)
         if user is not None:
             login(req, user=user)
-            messages.success(req, "succesfully logged in") 
             return redirect('home')
         else:
             messages.success(req, "oops, wrong credentials !")
             return redirect('home')
-    return render(req, "home.html", {})
+    else:
+        return render(req, "home.html", {})
 
 def login_user(req):
     ...
 
 def logout_user(req):
-    ...
+    logout(req)
+    messages.success(req, "Logged out")
+    return render(req, "home.html")
 
 
