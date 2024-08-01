@@ -29,7 +29,7 @@
                             <td>{{ i.city}}</td>
                             <td>{{ i.state}}</td>
                             <td>{{ i.zipcode}}</td>
-                            <td><button class="btn btn-danger">Delete record</button></td>
+                            <td><button class="btn btn-success"><a href="{% url 'records' i.id %}" class="anchors">Modify</a></button></td>
                         </tr>
                         {% endfor %}
                     {% endif %}

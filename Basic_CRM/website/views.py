@@ -26,7 +26,7 @@ def login_user(req):
 def logout_user(req):
     logout(req)
     messages.success(req, "Logged out")
-    return render(req, "home.html")
+    return redirect('home')
 
 def register_user(req):
     # new_user = User(username="")
@@ -54,3 +54,10 @@ def register_user(req):
     else: 
         return render(req, "register.html")
 
+def records_view(req, id):
+    """the records view"""
+    if req.user.is_authenticated :
+        record = records.objects.get(id=id)
+        return render(req, "record.html", {"record": record})
+    else:
+        return redirect('home')
