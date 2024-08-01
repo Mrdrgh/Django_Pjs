@@ -14,3 +14,19 @@
     text-decoration: none;
     color: white;
 }
+
+.table
+{
+    width: 80%;
+    padding: 50px;
+    margin: auto;
+    margin-top: 40px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 20px;
+    box-shadow: 5px 20px 30px rgba(0, 0, 0, 0.3);
+}
+
+tbody, thead
+{
+    border-radius: 20px;
+}

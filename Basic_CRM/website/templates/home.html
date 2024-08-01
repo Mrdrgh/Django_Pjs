@@ -2,19 +2,24 @@
 
 {% block somtn %}
         {% if user.is_authenticated %}
-                <h1>Hello User</h1>
-                <table>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Adress</th>
-                    <th>City</th>
-                    <th>State</th>
-                    <th>ZipCode</th>
-                </table>
-                {% if records %}
-                    {% for i in records%}
+                <h1 style="text-align: center;">Hello {{user.username}}</h1>
+                <table  class="table table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Adress</th>
+                            <th>City</th>
+                            <th>State</th>
+                            <th>ZipCode</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% if records %}
+                        {% for i in records%}
                         <tr>
                             <td>{{ i.first_name }}</td>
                             <td>{{ i.last_name}}</td>
@@ -24,11 +29,14 @@
                             <td>{{ i.city}}</td>
                             <td>{{ i.state}}</td>
                             <td>{{ i.zipcode}}</td>
-                            <td>{{ i.created_at }}</td>
-                            <td>{{ i.id }}</td>
+                            <td><button class="btn btn-danger">Delete record</button></td>
                         </tr>
-                    {% endfor %}
-                {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                        <tr><td colspan="9"><button class="btn btn-primary">Add a record</button></td></tr>
+                    </tbody>
+                </table>
+                
         {% else %}
         <div class="login_form">
             
