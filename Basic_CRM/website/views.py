@@ -2,9 +2,11 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
+from .models import records
 # Create your views here.
 
 def home(req):
+    recs = records.objects.all()
     if req.method == "POST":
         email = req.POST["email"]
         password = req.POST["password"]
@@ -16,7 +18,7 @@ def home(req):
             messages.success(req, "oops, wrong credentials !")
             return redirect('home')
     else:
-        return render(req, "home.html", {})
+        return render(req, "home.html", {'records': recs})
 
 def login_user(req):
     ...

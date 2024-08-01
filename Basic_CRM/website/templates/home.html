@@ -3,7 +3,33 @@
 {% block somtn %}
         {% if user.is_authenticated %}
                 <h1>Hello User</h1>
-            {% else %}
+                <table>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Adress</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>ZipCode</th>
+                </table>
+                {% if records %}
+                    {% for i in records%}
+                        <tr>
+                            <td>{{ i.first_name }}</td>
+                            <td>{{ i.last_name}}</td>
+                            <td>{{ i.email}}</td>
+                            <td>{{ i.phone}}</td>
+                            <td>{{ i.address}}</td>
+                            <td>{{ i.city}}</td>
+                            <td>{{ i.state}}</td>
+                            <td>{{ i.zipcode}}</td>
+                            <td>{{ i.created_at }}</td>
+                            <td>{{ i.id }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+        {% else %}
         <div class="login_form">
             
                 <h2>Login</h2>
