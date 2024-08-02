@@ -61,3 +61,39 @@ def records_view(req, id):
         return render(req, "record.html", {"record": record})
     else:
         return redirect('home')
+
+def modify_record(req, id):
+    """the view to modify a record
+    Args:
+        id: the id of the record"""
+    if req.user.is_authenticated:
+        record = records.objects.get(id=id)
+        if record.first_name == req.POST.get("first_name") and\
+            record.last_name == req.POST.get("last_name") and\
+            record.email == req.POST.get("email") and\
+            record.phone == req.POST.get("phone") and\
+            record.address == req.POST.get("adress") and\
+            record.city == req.POST.get("city") and\
+            record.state == req.POST.get("state") and\
+            record.zipcode == req.POST.get("zipcode"):
+            messages.success(req, "you must change a field")
+            return redirect("records", id=id)
+        else:
+            record.first_name = req.POST.get("first_name")
+            record.last_name = req.POST.get("last_name")
+            record.email = req.POST.get("email")
+            record.phone = req.POST.get("phone")
+            record.address = req.POST.get("adress")
+            record.city = req.POST.get("city")
+            record.state = req.POST.get("state")
+            record.zipcode = req.POST.get("zipcode")
+
+        record.save()
+        messages.success(req, "record edited succesfully")
+        return redirect("records", id=id)
+
+def delete_record(req, id):
+    ...
+
+
+
