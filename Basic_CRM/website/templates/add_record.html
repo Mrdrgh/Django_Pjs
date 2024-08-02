@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block somtn %}
+<form action="{% url 'add_record' %}" method="post">
+        {% csrf_token %}
+        <div class="input-group">
+            <span class="input-group-text">First and last name</span>
+            <input type="text" aria-label="First name" maxlength=50 name="first_name" class="form-control" >
+            <input type="text" aria-label="Last name"  maxlength=50  name="last_name" class="form-control" >
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">Email</span>
+            <input type="text"  maxlength=50  name="email" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">Phone</span>
+            <input type="tel" class="form-control"  maxlength=50 a name="phone" ria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">Adress</span>
+            <input type="text" class="form-control" maxlength=50  name="adress" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+        </div>
+
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">City</span>
+            <input type="text" class="form-control"  maxlength=50  name="city" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">State</span>
+            <input type="text" class="form-control"  maxlength=50  name="state"  aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">ZipCode</span>
+            <input type="text" class="form-control" maxlength=50  name="zipcode" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+        </div>
+        <button class="btn btn-primary" type="submit">Add record</button>
+
+
+
+    </form>
+{% endblock %}

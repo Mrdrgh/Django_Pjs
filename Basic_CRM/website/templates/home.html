@@ -3,6 +3,14 @@
 {% block somtn %}
         {% if user.is_authenticated %}
                 <h1 style="text-align: center;">Hello {{user.username}}</h1>
+                {% if messages %}
+                    {% for i in messages %}
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            {{ i }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
                 <table  class="table table-hover">
                     <thead class="table-dark">
                         <tr>
@@ -33,7 +41,7 @@
                         </tr>
                         {% endfor %}
                     {% endif %}
-                        <tr><td colspan="9"><button class="btn btn-primary">Add a record</button></td></tr>
+                        <tr><td colspan="9"><button class="btn btn-primary" onclick="window.location.href='{% url 'add_record' %}'">Add a record</button></td></tr>
                     </tbody>
                 </table>
                 

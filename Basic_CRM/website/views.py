@@ -93,7 +93,39 @@ def modify_record(req, id):
         return redirect("records", id=id)
 
 def delete_record(req, id):
-    ...
+    if req.user.is_authenticated:
+        record = records.objects.get(id=id)
+        record.delete()
+        messages.success(req, "succesfully deleted")
+        return redirect('home')
+
+
+def add_record(req):
+    """the view to add a record"""
+    if req.user.is_authenticated:
+        
+        first_name = req.POST.get("first_name")
+        last_name = req.POST.get("last_name")
+        email = req.POST.get("email")
+        phone = req.POST.get("phone")
+        address = req.POST.get("address")
+        city = req.POST.get("city")
+        state = req.POST.get("state")
+        zipcode = req.POST.get("zipcode")
+
+        new_record = records(
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
+            phone=phone,
+            address=address,
+            city=city,
+            state=state,
+            zipcode=zipcode,
+        )
+        new_record.save()
+        return redirect("home")
+
 
 
 

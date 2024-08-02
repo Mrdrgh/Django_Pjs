@@ -43,7 +43,7 @@
             <input type="text" class="form-control" maxlength=50  name="zipcode"  value="{{ record.zipcode }}"  aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
         </div>
         <button class="btn btn-primary" type="submit">Confirm Modify</button>
-        <button class="btn btn-danger" onclick="window.location.href='{% url 'delete_record' record.id%}'">Delete this record</button>
+        <button class="btn btn-danger" type="button" onclick="window.location.href='{% url 'delete_record' record.id%}'">Delete this record</button>
 
 
 
