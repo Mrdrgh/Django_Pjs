@@ -14,7 +14,8 @@ function Logout() {
 
 function RegisterLogout() {
     localStorage.clear()
-    return <Register />
+    console.log("went to register page");
+    return <Register />;
 }
 function App() {
     return (
@@ -23,15 +24,15 @@ function App() {
                 <Routes>
                     <Route 
                         path="/"
-                        Component={
+                        element={
                             <ProtectedRoute>
                                 <Home />
                             </ProtectedRoute>
                         }
                     />
                     <Route 
-                        path="/api/user/register"
-                        Component={
+                        path="/register"
+                        element={
                             <RegisterLogout />
                         }
                     />
