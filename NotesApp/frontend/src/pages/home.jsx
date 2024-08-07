@@ -51,22 +51,31 @@ export default function home() {
 
             
     const Createbtn = () => (
-        <button onClick={() => setCreateNote(!createNote)}>Create Note</button>
+        <button className="btn btn-success" onClick={() => setCreateNote(!createNote)}>Create Note</button>
     );
 
 
     return (
         <div className="homediv">
-            <h1>Notes</h1>
+            <nav className="navbar navbar-expand-lg navbar-dark bg-secondary">
+                <a className="navbar-brand" href="/">NotesApp</a>
+                <div className="collapse navbar-collapse">
+                    <ul className="navbar-nav ml-auto">
+                        <li className="nav-item">
+                            <a className="nav-link" href="/logout">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
             {Notes.length === 0 ? (
                 <p>No notes available</p>
             ) : (
                 Notes.slice().reverse().map((item) => (
-                    <div className="notediv" key={item.id}>
+                    <div className="notediv card bg-light shadow-sm rounded my-3" key={item.id}>
                         <h1>{item.title}</h1>
                         <p>{item.content}</p>
                         <br />
-                        <button onClick={() => deleteNotes(item.id)}>Delete</button>
+                        <button className="btn btn-danger" onClick={() => deleteNotes(item.id)}>Delete</button>
                     </div>
                 ))
             )}
