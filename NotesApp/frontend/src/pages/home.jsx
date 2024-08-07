@@ -11,11 +11,14 @@ export default function home() {
 
     useEffect(() => {getNotes()}, []);
 
-    const getNotes = () => {
-        api.get('/api/notes/')
-        .then((res) => res.data)
-        .then((data) => setNotes(data))
-        .catch((error) => {setError(error)})
+    const getNotes = async () => {
+        try {
+            const res = api.get("/api/notes/");
+            const data = (await res).data
+            setNotes(data)
+        } catch(error) {
+            setError(error);
+        }
     }
 
     const deleteNotes = (id) => {
@@ -23,6 +26,7 @@ export default function home() {
         .then((res) => {
             if (res.status === 204) {
                 alert("deleted succesfully");
+                getNotes()
             } else {
                 alert("failed to delete note");
             }
@@ -40,6 +44,7 @@ export default function home() {
                     alert("note created")
                     setContent("");
                     setTitle("");
+                    getNotes("");
                 } else {
                     alert("failed to create note");
                     setCreateNote(!createNote);
