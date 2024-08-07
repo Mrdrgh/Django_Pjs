@@ -1,4 +1,8 @@
 import Form from "../components/Form"
+import Nav from "./navbar"
 export default function Login() {
-    return (<Form route={"/api/token/"} method={"login"}/>)
+    return (<>
+        <Nav name="register" link="/register"/>
+        <Form route={"/api/token/"} method={"login"}/>
+    </>)
 };

@@ -1,5 +1,9 @@
 import Form from "../components/Form"
+import Nav from "./navbar";
 export default function Register() {
     console.log("rendering Register ...");
-    return (<Form route={"/api/user/register/"} method={"register"}/>)
+    return (<>
+        <Nav name="login" link="/login" />
+        <Form route={"/api/user/register/"} method={"register"}/>
+    </>);
 };

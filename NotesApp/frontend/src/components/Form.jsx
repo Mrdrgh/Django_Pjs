@@ -2,7 +2,7 @@ import { useState } from "react";
 import api from "../api";
 import { useNavigate } from "react-router-dom";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
-
+import "../styles/style.css"
 function Form({ route, method }) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -43,8 +43,8 @@ function Form({ route, method }) {
     );
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h1>{method === "login" ? "Login" : "Register"}</h1>
+        <form className="form" onSubmit={handleSubmit}>
+            <h1>{method === "login" ? "Login" : "Register"} </h1>
             {error && <div className="alert alert-danger" role="alert">{error}</div>}
             <div className="mb-3">
                 <label htmlFor="exampleInputEmail1" className="form-label">Username</label>
@@ -56,6 +56,7 @@ function Form({ route, method }) {
                 <input type="password" className="form-control" value={password} id="exampleInputPassword1" onChange={(e) => setPassword(e.target.value)} name="password" />
             </div>
             {loading ? loadingBtn : <button type="submit" className="btn btn-primary">Submit</button>}
+            {method === "login" ? <p>not a user ? <a href="/register">register</a></p> : null}
         </form>
     );
 }

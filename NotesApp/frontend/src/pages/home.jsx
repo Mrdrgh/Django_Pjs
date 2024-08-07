@@ -1,6 +1,7 @@
 import { useState, useEffect, createElement } from "react"
 import api from "../api"
 import Notes from "./notes"
+import Nav from "./navbar"
 
 export default function home() {
     const [title, setTitle] = useState("")
@@ -62,16 +63,7 @@ export default function home() {
 
     return (
         <div className="homediv">
-            <nav className="navbar navbar-expand-lg navbar-dark bg-secondary">
-                <a className="navbar-brand" href="/">NotesApp</a>
-                <div className="collapse navbar-collapse">
-                    <ul className="navbar-nav ml-auto">
-                        <li className="nav-item">
-                            <a className="nav-link" href="/logout">Logout</a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
+            <Nav name="logout" link="/logout" />
             {Notes.length === 0 ? (
                 <p>No notes available</p>
             ) : (
@@ -79,6 +71,7 @@ export default function home() {
                     <div className="notediv card bg-light shadow-sm rounded my-3" key={item.id}>
                         <h1>{item.title}</h1>
                         <p>{item.content}</p>
+                        <p>{item.created_at}</p>
                         <br />
                         <button className="btn btn-danger" onClick={() => deleteNotes(item.id)}>Delete</button>
                     </div>
