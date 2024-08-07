@@ -3,16 +3,17 @@ import api from "../api";
 import { useNavigate } from "react-router-dom";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
 
-
 function Form({ route, method }) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);  // State to store error message
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         setLoading(true);
         e.preventDefault();
+        setError(null);  // Clear previous error message
 
         try {
             const response = await api.post(route, { username, password });
@@ -24,7 +25,11 @@ function Form({ route, method }) {
                 navigate("/login");
             }
         } catch (error) {
-            alert(error);
+            if (error.response && error.response.status === 401) {
+                setError("Invalid username or password. Please try again.");
+            } else {
+                setError("An unexpected error occurred. Please try again later.");
+            }
         } finally {
             setLoading(false);
         }
@@ -40,6 +45,7 @@ function Form({ route, method }) {
     return (
         <form onSubmit={handleSubmit}>
             <h1>{method === "login" ? "Login" : "Register"}</h1>
+            {error && <div className="alert alert-danger" role="alert">{error}</div>}
             <div className="mb-3">
                 <label htmlFor="exampleInputEmail1" className="form-label">Username</label>
                 <input type="text" className="form-control" value={username} onChange={(e) => setUsername(e.target.value)} name="username" />
@@ -55,4 +61,3 @@ function Form({ route, method }) {
 }
 
 export default Form;
-
