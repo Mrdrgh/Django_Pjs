@@ -13,9 +13,9 @@
   - sqlparse
   - psycopg2-binary
   - python-dotenv
-  ---
   - make a backend directory, and install the backend dependecies, it is recommended to have venv (virtual environment) active.
   - you can install them using the `pip install -r requirements.txt` the requirements file is <a href="https://github.com/Mrdrgh/Django_Pjs/blob/main/NotesApp/backend/backend/requirements.txt">here</a>
+  ---
 - Frontend (Vite/React):
   - make a frontend directory, cd into it.
   - run `npm install react-router-dom axios jwt-decode && npm create vite@latest . -- --template react`
