@@ -2,8 +2,7 @@
 - This is a Django/React app that uses the REST API as a standart communication between frontend and backend, you can register, login, add Notes (user specific) and delete them, it uses the python REST_framework, AXIOS interceptors, JSON Web Tokens, CORS headers, and the VITE frontend framework
 ---
 ## Requirements
-- Backend (Django): 
-`
+- Backend (Django):
   - asgiref
   - Django
   - django-cors-headers
@@ -14,7 +13,6 @@
   - sqlparse
   - psycopg2-binary
   - python-dotenv
-`
   ---
   - make a backend directory, and install the backend dependecies, it is recommended to have venv (virtual environment) active.
   - you can install them using the `pip install -r requirements.txt` the requirements file is <a href="https://github.com/Mrdrgh/Django_Pjs/blob/main/NotesApp/backend/backend/requirements.txt">here</a>
