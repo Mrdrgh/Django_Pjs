@@ -1,5 +1,5 @@
 # NotesApp
-- This is a Django/React app that uses the REST API as a standart communication between frontend and backend, you can register, login, add Notes (user specific) and delete them, it uses the python REST_framework, AXIOS interceptors, JSON Web Tokens, CORS headers, and the VITE frontend framework
+- This is a Django/React app that uses the REST API as a standart communication between frontend and backend, you can register, login, add Notes (user specific) and delete them, it uses the Django REST framework to build the backend API that we will use, AXIOS interceptors, JSON Web Tokens, CORS headers, and the VITE frontend framework.
 ---
 ## Requirements
 - Backend (Django):
