@@ -16,5 +16,30 @@ class BlogListCreate(generics.ListCreateAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        return 
+        return Blog.objects.filter(author=user)
+
+    def perform_create(self, serializer):
+        if serializer.is_valid():
+            serializer.save(author=self.request.user)
+        else:
+            print(serializer.error)
+
+class BlogUpdate(generics.UpdateAPIView):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Blog.objects.filter(author=user)
+
+
+class BlogDelete(generics.DestroyAPIView):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Blog.objects.filter(author=user)
 
