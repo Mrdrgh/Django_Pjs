@@ -1,5 +1,9 @@
 import React from "react";
-
+import Form from "../components/Form";
+import Nav from "./navbar";
 export default function Register() {
-return (<h1>Register</h1>)
+    return (<>
+    <Nav name="login" link="/login" />
+    <Form route={"/api/user/register"} method={"register"} />
+    </>)
 };

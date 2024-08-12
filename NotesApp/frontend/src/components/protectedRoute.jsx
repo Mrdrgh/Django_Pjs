@@ -45,7 +45,8 @@ function ProtectedRoute({children}) {
     if (isAuthorized === null) {
         return (<div>Loading ...</div>)
     }
-
+    console.log("got into the protected route")
+    if (!isAuthorized) {console.log("is_auth is false")}
     return isAuthorized ? children : <Navigate to="/login" />;
 }
 

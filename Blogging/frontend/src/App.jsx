@@ -8,28 +8,32 @@ import Home from './pages/home'
 
 function RegisterLogout() {
     localStorage.clear()
+    console.log("went to register");
     return <Register />
 }
 
 function Logout() {
     localStorage.clear();
+    console.log("log out");
     return <Navigate to='/login' />;
 }
 
 function App() {
-    <BrowserRouter>
-        <Routes>
-            <Route path='/login' element={<Login />} />
-            <Route path='/register' element={<RegisterLogout />} />
-            <Route path='*' element={<Notfound />} />
-            <Route path='/logout' element={<Logout />} />
-            <Route path='/' element={
-                <ProtectedRoute>
-                    <Home />
-                </ProtectedRoute>
-            } />
-        </Routes>
-    </BrowserRouter>
+    return (<>
+        <BrowserRouter>
+            <Routes>
+                <Route path='/login' element={<Login />} />
+                <Route path='/register' element={<RegisterLogout />} />
+                <Route path='*' element={<Notfound />} />
+                <Route path='/logout' element={<Logout />} />
+                <Route path='/' element={
+                    <ProtectedRoute>
+                        <Home />
+                    </ProtectedRoute>
+                } />
+            </Routes>
+        </BrowserRouter>
+    </>)
 }
 
 export default App

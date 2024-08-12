@@ -1,5 +1,9 @@
 import React from "react";
-
+import Form from "../components/Form";
+import Nav from "./navbar";
 export default function Login() {
-    return (<h1>Login</h1>)
+    return (<>
+    <Nav name="register" link="/register"/>
+    <Form route={"/api/token/"} method={"login"} />
+    </>)
 };

@@ -1,33 +1,35 @@
-import { Children, useEffect, useState } from "react";
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
+import {Navigate} from "react-router-dom"
 import {jwtDecode} from "jwt-decode"
 import api from "../api"
-import { Navigate } from "react-router-dom";
+import { REFRESH_TOKEN, ACCESS_TOKEN } from "../constants"
+import { useEffect, useState } from "react"
 
+function ProtectedRoute({children}) {
+    const [isAuthorized, setIsAuthorized] = useState(null)
 
-export default function ProtectedRoute({props}) {
-    const [isAuth, setIsAuth] = useState(null)
-
-    useEffect(auth().catch(() => setIsAuth(false)), [])
-    const refreshToken =  async () => {
+    useEffect(() => {
+        auth().catch(() => setIsAuthorized(false))
+    }, []);
+    const refreshToken = async () => {
+        const refresh_token = localStorage.getItem(REFRESH_TOKEN);
         try {
-            const refreshToken = localStorage.getItem(REFRESH_TOKEN)
-            const res = await api.post('/api/token/refresh/', {"refresh": refreshToken})
+            const res = await api.post('/api/token/refresh/', {"refresh": refresh_token})
             if (res.status === 200) {
-                localStorage.setItem(ACCESS_TOKEN, res.data.access)
-                setIsAuth(true)
+                localStorage.setItem(ACCESS_TOKEN, res.data.access);
+                setIsAuthorized(true);
             } else {
-                setIsAuth(false)
+                setIsAuthorized(false);
             }
         } catch (error) {
-            console.log(error);
-            setIsAuth(false);
+            console.log(error)
+            setIsAuthorized(false)
         }
     }
+
     const auth = async () => {
         const token = localStorage.getItem(ACCESS_TOKEN)
         if (!token) {
-            setIsAuth(false);
+            setIsAuthorized(false)
             return
         }
         const decoded = jwtDecode(token)
@@ -36,9 +38,16 @@ export default function ProtectedRoute({props}) {
         if (expiration < now) {
             await refreshToken()
         } else {
-            setIsAuth(true);
+            setIsAuthorized(true);
         }
-
     }
-    return isAuth ? props : <Navigate to='/login' />;
+
+    if (isAuthorized === null) {
+        return (<div>Loading ...</div>)
+    }
+    console.log("got into the protected route")
+    if (!isAuthorized) {console.log("is_auth is false")}
+    return isAuthorized ? children : <Navigate to="/login" />;
 }
+
+export default ProtectedRoute;
