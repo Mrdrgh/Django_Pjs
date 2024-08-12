@@ -4,6 +4,6 @@ import Nav from "./navbar";
 export default function Register() {
     return (<>
     <Nav name="login" link="/login" />
-    <Form route={"/api/user/register"} method={"register"} />
+    <Form route={"/api/user/register/"} method={"register"} />
     </>)
 };

@@ -29,7 +29,8 @@ class FriendshipSerializer(serializers.ModelSerializer):
 
 
 class BlogSerializer(serializers.ModelSerializer):
+    author = serializers.CharField(source='author.username', read_only=True)
+
     class Meta:
         model = Blog
         fields = ['id', 'title', 'content', 'created_at', 'author']
-        extra_kwargs = {'author': {'read_only': True}}

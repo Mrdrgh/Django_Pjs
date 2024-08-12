@@ -28,11 +28,12 @@ class BlogListCreate(generics.ListCreateAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        return Blog.objects.filter(author=user)
+        friends = Friendship.objects.filter(user=user).values_list('friend', flat=True)
+        return Blog.objects.filter(author__in=[user] + list(friends))
 
     def perform_create(self, serializer):
         if serializer.is_valid():
-            serializer.save(author=self.request.user)
+            serializer.save(author=self.request.user.username)
         else:
             print(serializer.error)
 
