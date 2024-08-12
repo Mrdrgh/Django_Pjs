@@ -1,5 +1,7 @@
+from typing import Iterable
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 
 # Create your models here.
 class Blog(models.Model):
@@ -25,6 +27,22 @@ class Friendship(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
     friend = models.ForeignKey(User, on_delete=models.CASCADE, related_name='friend')
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'friend'], name='unique_friendship')
+        ]
+    def save(self, force_insert: bool = ..., force_update: bool = ..., using: str | None = ..., update_fields: Iterable[str] | None = ...) -> None:
+        if self.user == self.friend:
+            raise ValidationError("cannot be friend of yourself")
+        if Friendship.objects.filter(user=self.friend, friend=self.user).exists():
+            raise ValidationError("friendship already exists")
+        else:
+            userProfile = Profile.objects.filter(user=self.user)
+            friendProfile = Profile.objects.filter(user=self.friend)
+            userProfile.friends += 1
+            friendProfile.friends += 1
+            super().save()
 
     def __str__(self) -> str:
         return f'{self.user} - {self.friend}'

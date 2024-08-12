@@ -12,12 +12,12 @@ class CreateUserView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         if serializer.is_valid():
+            user = serializer.save()
             Profile.objects.create(
-                user=self.request.user,
+                user=user,
                 bio='',
-                username=self.request.user.username,
+                username=user.username
             )
-            serializer.save()
         else:
             print(serializer.error)
 
