@@ -1,5 +1,5 @@
 from  rest_framework import serializers
-from .models import Blog
+from .models import Blog, Profile, Friendship
 from django.contrib.auth.models import User
 
 
@@ -9,8 +9,23 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', "username", "password"]
     
     def create(self, validated_data):
-        user = User.objects.create(**validated_data)
+        user = User.objects.create_user(**validated_data)
         return user
+
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model= Profile
+        fields= ['id', 'user', 'bio']
+
+
+
+class FriendshipSerializer(serializers.ModelSerializer):
+    class Meta:
+        model= Friendship
+        fields= ['id', 'user', 'friend', 'created_at']
+
 
 class BlogSerializer(serializers.ModelSerializer):
     class Meta:
