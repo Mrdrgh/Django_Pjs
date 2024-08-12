@@ -58,7 +58,7 @@ class BlogDelete(generics.DestroyAPIView):
 
 
 class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Profile
+    queryset = Profile.objects.all()
     serializer_class = UserProfileSerializer
     permission_classes= [IsAuthenticated]
 
