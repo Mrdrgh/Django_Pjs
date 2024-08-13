@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from .serializers import *
+from django.db.models import Q
 from .models import Blog, Profile, Friendship
 # Create your views here.
 class CreateUserView(generics.CreateAPIView):
@@ -21,6 +22,13 @@ class CreateUserView(generics.CreateAPIView):
         else:
             print(serializer.error)
 
+class UserBlogsList(generics.ListAPIView):
+    serializer_class = BlogSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Blog.objects.filter(author=user)
 
 class BlogListCreate(generics.ListCreateAPIView):
     serializer_class = BlogSerializer
@@ -66,16 +74,24 @@ class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
         return Profile.objects.get(user=self.request.user)
 
 
-class FriendshipLisstCreate(generics.ListCreateAPIView):
-    queryset = Friendship.objects.all()
-    serializer_class= FriendshipSerializer
-    permission_classes= []
+class FriendshipListCreate(generics.ListCreateAPIView):
+    serializer_class = FriendshipSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user
-        return Friendship.objects.filter(user=user)
+        return Friendship.objects.filter(
+            Q(user=user) | Q(friend=user)
+        )
+
     def perform_create(self, serializer):
         if serializer.is_valid():
             serializer.save(user=self.request.user)
         else:
-            print(serializer.error)
+            print(serializer.errors)
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        if instance.friend == self.request.user:
+            representation['friend'] = instance.user.username
+        return representation

@@ -24,9 +24,24 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 
 class FriendshipSerializer(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField()
+    friend = serializers.SerializerMethodField()
+
     class Meta:
-        model= Friendship
-        fields= ['id', 'user', 'friend', 'created_at']
+        model = Friendship
+        fields = ['id', 'user', 'friend', 'created_at']
+
+    def get_user(self, obj):
+        request = self.context.get('request')
+        if request and request.user == obj.friend:
+            return obj.friend.username
+        return obj.user.username
+
+    def get_friend(self, obj):
+        request = self.context.get('request')
+        if request and request.user == obj.friend:
+            return obj.user.username
+        return obj.friend.username
 
 
 class BlogSerializer(serializers.ModelSerializer):
