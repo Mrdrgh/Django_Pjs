@@ -95,3 +95,23 @@ class FriendshipListCreate(generics.ListCreateAPIView):
         if instance.friend == self.request.user:
             representation['friend'] = instance.user.username
         return representation
+
+class FriendshipDelete(generics.DestroyAPIView):
+    queryset = Friendship.objects.all()
+    serializer_class = FriendshipSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Friendship.objects.filter(
+            Q(user=user) | Q(friend=user)
+        )
+
+    def perform_destroy(self, instance):
+        userProfile = Profile.objects.get(user=instance.user)
+        friendProfile = Profile.objects.get(user=instance.friend)
+        userProfile.friends -= 1
+        friendProfile.friends -= 1
+        userProfile.save()
+        friendProfile.save()
+        instance.delete()

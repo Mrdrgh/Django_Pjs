@@ -13,6 +13,15 @@ export default function Profile() {
     const [loading, setLoading] = useState(true);
     const searchInputRef = useRef(null);
 
+    const handleRemoveFriend = async (friendId) => {
+        try {
+            await api.delete(`/api/friendships/${friendId}/`);
+            setFriends(friends.filter(friend => friend.id !== friendId));
+            setFilteredFriends(filteredFriends.filter(friend => friend.id !== friendId));
+        } catch (error) {
+            setError("Failed to remove friend: " + error.toString());
+        }
+    };
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -47,7 +56,7 @@ export default function Profile() {
 
     useEffect(() => {
         if (showFriendsModal && searchInputRef.current) {
-            searchInputRef.current.focus();
+            setTimeout(() => searchInputRef.current.focus(), 100);
         }
     }, [showFriendsModal]);
 
@@ -61,7 +70,7 @@ export default function Profile() {
     );
 
     const FriendsModal = () => (
-        <div className={`modal ${showFriendsModal ? 'd-block show' : ''}`} tabIndex="-1">
+        <div className={`modal fade ${showFriendsModal ? 'show' : ''}`} style={{display: showFriendsModal ? 'block' : 'none'}} tabIndex="-1">
             <div className="modal-dialog modal-dialog-scrollable">
                 <div className="modal-content">
                     <div className="modal-header">
@@ -76,13 +85,19 @@ export default function Profile() {
                             placeholder="Search friends..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
+                            onBlur={(e) => e.target.focus()} // Keep focus on the input
                         />
                         {filteredFriends.map((item) => (
                             <div key={item.id} className="d-flex justify-content-between align-items-center mb-3">
                                 <p className="friend-name mb-0">{item.friend}</p>
                                 <div className="d-flex">
                                     <button className="btn btn-sm btn-outline-primary me-2">Send Message</button>
-                                    <button className="btn btn-sm btn-outline-danger">Remove Friend</button>
+                                    <button 
+                                        className="btn btn-sm btn-outline-danger"
+                                        onClick={() => handleRemoveFriend(item.id)}
+                                    >
+                                        Remove Friend
+                                    </button>
                                 </div>
                             </div>
                         ))}
@@ -127,26 +142,31 @@ export default function Profile() {
 
                     {/* Blogs Section */}
                     <div className="col-lg-8">
-                        <h2 className="h5">Blogs</h2>
-                        {blogs.length > 0 ? (
-                            blogs.map((item) => (
-                                <div key={item.id} className="card mb-3 shadow-box">
-                                    <div className="card-body">
-                                        <h3 className="card-title blog-title">{item.title}</h3>
-                                        <p className="card-text">{item.content}</p>
+                        <h2 className="blogs-header">Blogs</h2>
+                        <div className="blogs-container">
+                            {blogs.length > 0 ? (
+                                blogs.map((item) => (
+                                    <div key={item.id} className="card mb-3 shadow-box">
+                                        <div className="card-body">
+                                            <h3 className="card-title blog-title">{item.title} <p>{item.created_at}</p></h3>
+                                            <p className="card-text">{item.content}</p>
+                                        </div>
                                     </div>
-                                </div>
-                            ))
-                        ) : (
-                            <p>No blogs to show.</p>
-                        )}
+                                ))
+                            ) : (
+                                <p>No blogs to show.</p>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
 
             <FriendsModal />
 
-            <style jsx>{`
+            <style>
+                {`
+                @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Playfair+Display:wght@700&display=swap');
+
                 .profile-pic-container {
                     width: 150px;
                     height: 150px;
@@ -173,9 +193,22 @@ export default function Profile() {
                     box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
                 }
 
+                .blogs-header {
+                    font-family: 'Poppins', serif;
+                    font-size: 2.5rem;
+                    text-align: center;
+                    margin-bottom: 1rem;
+                }
+
+                .blogs-container {
+                    max-height: 600px;
+                    overflow-y: auto;
+                    padding-right: 15px;
+                }
+
                 .blog-title {
-                    font-family: 'Georgia', serif;
-                    font-weight: bold;
+                    font-family: 'Poppins', sans-serif;
+                    font-weight: 600;
                     font-size: 1.5rem;
                 }
 
@@ -193,25 +226,20 @@ export default function Profile() {
 
                 .modal {
                     background-color: rgba(0, 0, 0, 0.5);
-                    transition: opacity 0.3s ease;
+                }
+
+                .modal.fade .modal-dialog {
+                    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+                    transform: scale(0.9);
                     opacity: 0;
-                    pointer-events: none;
-                }
-
-                .modal.show {
-                    opacity: 1;
-                    pointer-events: auto;
-                }
-
-                .modal-dialog {
-                    transition: transform 0.3s ease;
-                    transform: translateY(-50px);
                 }
 
                 .modal.show .modal-dialog {
-                    transform: translateY(0);
+                    transform: scale(1);
+                    opacity: 1;
                 }
-            `}</style>
+                `}
+            </style>
         </>
     );
 }

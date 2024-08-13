@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import BlogListCreate, BlogUpdate, BlogDelete, ProfileDetail, FriendshipListCreate, UserBlogsList
+from .views import *
 urlpatterns = [
     path('blogs/', BlogListCreate.as_view(), name='create_blog'),
     path('blogs/update/<int:pk>/', BlogUpdate.as_view(), name='update_blog'),
@@ -7,4 +7,5 @@ urlpatterns = [
     path('profile/', ProfileDetail.as_view(), name='profile_detail'),
     path('user_blogs/', UserBlogsList.as_view(), name='user_blogs'),
     path('friendships/', FriendshipListCreate.as_view()),
+    path('frienships/<int:pk>/', FriendshipDelete.as_view()),
 ]
