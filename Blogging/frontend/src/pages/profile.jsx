@@ -17,9 +17,10 @@ export default function Profile() {
     }
     return (
         <>
-        <Nav name={['logout']}/>
-        {error && <div className="alert alert-danger" role="alert">{error}</div>}
+        <Nav name={['logout', 'home']}/>
+        
         <h1>{profile.user}</h1>
+        <img src={`${profile.profile_picture}`} />
         <p>{profile.bio}</p>
         <p>friends nbr : {profile.friends}</p>
         </>

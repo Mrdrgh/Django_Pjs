@@ -58,13 +58,12 @@ class BlogDelete(generics.DestroyAPIView):
 
 
 class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Profile.objects.all()
     serializer_class = UserProfileSerializer
     permission_classes= [IsAuthenticated]
 
-    def get_queryset(self):
-        user = self.request.user
-        return Profile.objects.filter(user=user)
+
+    def get_object(self):
+        return Profile.objects.get(user=self.request.user)
 
 
 class FriendshipLisstCreate(generics.ListCreateAPIView):

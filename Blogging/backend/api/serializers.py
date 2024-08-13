@@ -19,7 +19,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     user = serializers.CharField(source='user.username')
     class Meta:
         model= Profile
-        fields= ['id', 'user', 'bio', 'friends']
+        fields= ['id', 'user', 'bio', 'friends', 'profile_picture']
 
 
 
