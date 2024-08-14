@@ -1,7 +1,15 @@
-import React from "react";
-
+import React, { useState } from "react";
 
 export default function BlogMiniature(props) {
+    const [followed, setFollowed] = useState(false);
+
+    const handleClick = (id) => {
+        props.onFollow(id);
+        setFollowed(true);
+    }
+
+    const showFollowButton = props.FeaturedPage && !props.isFriend && !followed;
+
     return (
         <div className="blogMiniature card mb-3 shadow-sm">
             <div className="card-body">
@@ -11,7 +19,14 @@ export default function BlogMiniature(props) {
                     </h2>
                     <div className="d-flex align-items-center">
                         <h3 className="card-subtitle text-muted mb-0 me-2">{props.author}</h3>
-                        <button variant="outline-primary" className="btn btn-success rounded-circle" onClick={() => {props.HandleClick(props.id)}}>+</button>
+                        {showFollowButton && 
+                            <button 
+                                className="btn btn-success rounded-circle" 
+                                onClick={() => handleClick(props.id)}
+                            >
+                                +
+                            </button>
+                        }
                     </div>
                 </div>
                 <p className="card-text">{props.content.slice(0, 500)}{props.content.length > 500 ? '...' : ''}</p>
