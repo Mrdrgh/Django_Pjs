@@ -49,7 +49,7 @@ export default function Profile() {
     useEffect(() => {
         setFilteredFriends(
             friends.filter(friend =>
-                friend.friend.toLowerCase().includes(searchTerm.toLowerCase())
+                friend.friend_username.toLowerCase().includes(searchTerm.toLowerCase())
             )
         );
     }, [searchTerm, friends]);
@@ -69,7 +69,8 @@ export default function Profile() {
         </div>
     );
 
-    const FriendsModal = () => (
+    function FriendsModal() {
+        return (
         <div className={`modal fade ${showFriendsModal ? 'show' : ''}`} style={{display: showFriendsModal ? 'block' : 'none'}} tabIndex="-1">
             <div className="modal-dialog modal-dialog-scrollable">
                 <div className="modal-content">
@@ -89,12 +90,12 @@ export default function Profile() {
                         />
                         {filteredFriends.map((item) => (
                             <div key={item.id} className="d-flex justify-content-between align-items-center mb-3">
-                                <p className="friend-name mb-0">{item.friend}</p>
+                                <p className="friend-name mb-0">{item.friend_username}</p>
                                 <div className="d-flex">
                                     <button className="btn btn-sm btn-outline-primary me-2">Send Message</button>
                                     <button 
                                         className="btn btn-sm btn-outline-danger"
-                                        onClick={() => handleRemoveFriend(item.id)}
+                                        onClick={() => {handleRemoveFriend(item.friend); console.log("item id: " + item.id); console.log("item friend_id : " + item.friend.id);}}
                                     >
                                         Remove Friend
                                     </button>
@@ -105,7 +106,8 @@ export default function Profile() {
                 </div>
             </div>
         </div>
-    );
+        );
+    };
 
     if (loading) return <LoadingTemplate />;
 
@@ -161,7 +163,7 @@ export default function Profile() {
                 </div>
             </div>
 
-            <FriendsModal />
+            {FriendsModal()}
 
             <style>
                 {`
