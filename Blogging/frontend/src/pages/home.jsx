@@ -6,8 +6,20 @@ import BlogMiniature from "./myBlogs";
 export default function Home() {
     const [blogs, setBlogs] = useState([])
     const [error, setError] = useState('')
+    const [user, setUser] = useState({})
 
-    useEffect(() => {getBlogs()}, [])
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                await getBlogs()
+                await getUserProfile()
+            } catch (error) {
+                setError(error.toString())
+            }
+        }
+        fetchData();
+    }, []);
+
     const getBlogs = async () => {
         try {
             const res = await api.get('/api/blogs/')
@@ -17,8 +29,18 @@ export default function Home() {
             setError(error);
         }
     };
+    const getUserProfile = async () => {
+        try {const res = await api.get('/api/profile/')
+        setUser(res.data)} catch (error) {
+            setError(error);
+        }
+    }
     return (<> 
-    <Nav name={['logout', 'profile']} />
+    <Nav name='/home'
+        profile_picture={user.profile_picture}
+        username={user.user} 
+        email={user.email}
+    />
     {error && <div className="alert alert-danger" role="alert">{error}</div>}
     {blogs.map(
         (blog) => {
