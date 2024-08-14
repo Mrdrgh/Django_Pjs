@@ -24,7 +24,7 @@ export default function Home() {
         (blog) => {
             return <BlogMiniature
             title={blog.title}
-            author={blog.author}
+            author={blog.author_username}
             content={blog.content}
             created_at={blog.created_at} />
         } 

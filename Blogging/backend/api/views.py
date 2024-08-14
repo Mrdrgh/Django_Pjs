@@ -30,6 +30,14 @@ class UserBlogsList(generics.ListAPIView):
         user = self.request.user
         return Blog.objects.filter(author=user)
 
+class BlogList(generics.ListAPIView):
+    serializer_class = BlogSerializer
+    permission_classes = [AllowAny]
+    lookup_field= "author"
+
+    def get_queryset(self):
+        return Blog.objects.filter(user=self.request.user)
+
 class BlogListCreate(generics.ListCreateAPIView):
     serializer_class = BlogSerializer
     permission_classes = [IsAuthenticated]

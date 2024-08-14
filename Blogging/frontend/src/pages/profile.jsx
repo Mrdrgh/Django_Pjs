@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import api from "../api";
 import Nav from "./navbar";
-
+//TODO add update and delete blog options
 export default function Profile() {
     const [profile, setProfile] = useState({});
     const [error, setError] = useState("");
@@ -49,7 +49,7 @@ export default function Profile() {
     useEffect(() => {
         setFilteredFriends(
             friends.filter(friend =>
-                friend.friend_username.toLowerCase().includes(searchTerm.toLowerCase())
+                friend.friend.toLowerCase().includes(searchTerm.toLowerCase())
             )
         );
     }, [searchTerm, friends]);
@@ -90,12 +90,12 @@ export default function Profile() {
                         />
                         {filteredFriends.map((item) => (
                             <div key={item.id} className="d-flex justify-content-between align-items-center mb-3">
-                                <p className="friend-name mb-0">{item.friend_username}</p>
+                                <p className="friend-name mb-0">{item.friend}</p>
                                 <div className="d-flex">
                                     <button className="btn btn-sm btn-outline-primary me-2">Send Message</button>
                                     <button 
                                         className="btn btn-sm btn-outline-danger"
-                                        onClick={() => {handleRemoveFriend(item.friend); console.log("item id: " + item.id); console.log("item friend_id : " + item.friend.id);}}
+                                        onClick={() => {handleRemoveFriend(item.id);}}
                                     >
                                         Remove Friend
                                     </button>
