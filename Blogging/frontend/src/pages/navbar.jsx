@@ -7,7 +7,7 @@ export default function Nav(props) {
     const is_auth = page_auth.includes(props.name);
 
     return (
-        <div>
+        <div style={{boxShadow: '0 3px 10px rgba(0, 0, 0, 0.3)'}}>
             <nav className="navbar navbar-expand-md navbar-light bg-light">
                 <div className="container-fluid">
                     <a className="navbar-brand d-flex align-items-center" href="/">

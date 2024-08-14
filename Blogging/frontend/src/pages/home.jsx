@@ -35,6 +35,14 @@ export default function Home() {
             setError(error);
         }
     }
+    const HandleClick = async (id) => {
+        try {
+            await api.post(`/api/friendships/${id}`)
+            console.log("freindship request sent");
+        } catch (error) {
+            setError(error);
+        }
+    }
     return (<> 
     <Nav name='/home'
         profile_picture={user.profile_picture}
@@ -48,7 +56,10 @@ export default function Home() {
             title={blog.title}
             author={blog.author_username}
             content={blog.content}
-            created_at={blog.created_at} />
+            created_at={blog.created_at}
+            id={blog.author}
+        HandleClick={() => {HandleClick}}
+             />
         } 
     )}
     </>)

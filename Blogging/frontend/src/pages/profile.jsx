@@ -113,7 +113,8 @@ export default function Profile() {
 
     return (
         <>
-            <Nav name={['logout', 'home']}/>
+            <Nav name={'/profile'}
+            />
 
             {error && <div className="alert alert-danger" role="alert">Error: {error}</div>}
 

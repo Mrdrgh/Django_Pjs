@@ -81,6 +81,17 @@ class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
     def get_object(self):
         return Profile.objects.get(user=self.request.user)
 
+class FriendshipCreate(generics.CreateAPIView):
+    serializer_class = FriendshipSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        if serializer.is_valid():
+            friend_id = self.kwargs.get('id')
+            friend = User.objects.get(id=friend_id)
+            serializer.save(user=self.request.user, friend=friend)
+        else:
+            print(serializer.errors)
 
 class FriendshipListCreate(generics.ListCreateAPIView):
     serializer_class = FriendshipSerializer

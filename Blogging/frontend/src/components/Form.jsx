@@ -2,21 +2,46 @@ import { useState } from "react";
 import api from "../api";
 import { useNavigate } from "react-router-dom";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
+import "../styles/Form.css";
 
 function Form({ route, method }) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [email, setEmail] = useState("");
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);  // State to store error message
+    const [error, setError] = useState(null);
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
-        setLoading(true);
         e.preventDefault();
-        setError(null);  // Clear previous error message
+        setLoading(true);
+        setError(null);
+
+        if (method !== "login" && password !== confirmPassword) {
+            setError("Passwords do not match.");
+            setLoading(false);
+            return;
+        }
 
         try {
-            const response = await api.post(route, { username, password });
+            const formData = new FormData();
+            formData.append("username", username);
+            formData.append("password", password);
+            
+            if (method !== "login") {
+                formData.append("email", email);
+                if (profilePicture) {
+                    formData.append("profile_picture", profilePicture);
+                }
+            }
+
+            const response = await api.post(route, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
             if (method === "login") {
                 localStorage.setItem(ACCESS_TOKEN, response.data.access);
                 localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
@@ -26,7 +51,7 @@ function Form({ route, method }) {
             }
         } catch (error) {
             if (error.response && error.response.status === 401) {
-                setError("Invalid username or password. Please try again.");
+                setError("Invalid credentials. Please try again.");
             } else {
                 setError("An unexpected error occurred. Please try again later.");
             }
@@ -36,28 +61,85 @@ function Form({ route, method }) {
     };
 
     const loadingBtn = (
-        <button className="btn btn-primary" type="button" disabled>
-            <span className="spinner-border spinner-border-sm" aria-hidden="true"></span>
+        <button className="btn btn-primary w-100" type="button" disabled>
+            <span className="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
             <span role="status">Loading...</span>
         </button>
     );
 
     return (
-        <form className="form" onSubmit={handleSubmit}>
-            <h1>{method === "login" ? "Login" : "Register"} </h1>
-            {error && <div className="alert alert-danger" role="alert">{error}</div>}
-            <div className="mb-3">
-                <label htmlFor="exampleInputEmail1" className="form-label">Username</label>
-                <input type="text" className="form-control" value={username} onChange={(e) => setUsername(e.target.value)} name="username" />
-                <div id="emailHelp" className="form-text">We'll never share your username, password or any credentials with anyone else.</div>
+        <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '95vh', background: 'rgb(184,182,227)', background: 'linear-gradient(90deg, rgba(184,182,227,1) 0%, rgba(176,201,205,1) 52%, rgba(186,195,200,0.895331374737395) 99%)'}}>
+            <div className="card p-4 shadow" style={{ width: '100%', maxWidth: '500px', borderRadius: '15px' }}>
+                <form className="form" onSubmit={handleSubmit}>
+                    <h1 className="text-center mb-4">{method === "login" ? "Login" : "Register"}</h1>
+                    {error && <div className="alert alert-danger" role="alert">{error}</div>}
+                    <div className="mb-3">
+                        <label htmlFor="username" className="form-label">Username</label>
+                        <input 
+                            type="text" 
+                            className="form-control" 
+                            id="username"
+                            value={username} 
+                            onChange={(e) => setUsername(e.target.value)} 
+                            name="username" 
+                            required
+                        />
+                    </div>
+                    {method !== "login" && (
+                        <div className="mb-3">
+                            <label htmlFor="email" className="form-label">Email</label>
+                            <input 
+                                type="email" 
+                                className="form-control" 
+                                id="email"
+                                value={email} 
+                                onChange={(e) => setEmail(e.target.value)} 
+                                name="email" 
+                                required
+                            />
+                        </div>
+                    )}
+                    <div className="mb-3">
+                        <label htmlFor="password" className="form-label">Password</label>
+                        <input 
+                            type="password" 
+                            className="form-control" 
+                            id="password"
+                            value={password} 
+                            onChange={(e) => setPassword(e.target.value)} 
+                            name="password" 
+                            required
+                        />
+                    </div>
+                    {method !== "login" && (
+                        <>
+                            <div className="mb-3">
+                                <label htmlFor="confirmPassword" className="form-label">Confirm Password</label>
+                                <input 
+                                    type="password" 
+                                    className="form-control" 
+                                    id="confirmPassword"
+                                    value={confirmPassword} 
+                                    onChange={(e) => setConfirmPassword(e.target.value)} 
+                                    name="confirmPassword" 
+                                    required
+                                />
+                            </div>
+                        </>
+                    )}
+                    {loading ? loadingBtn : <button type="submit" className="btn btn-primary w-100">Submit</button>}
+                    {method === "login" ? (
+                        <p className="text-center mt-3 mb-0">
+                            Not a user? <a href="/register">Register</a>
+                        </p>
+                    ) : (
+                        <p className="text-center mt-3 mb-0">
+                            Already have an account? <a href="/login">Login</a>
+                        </p>
+                    )}
+                </form>
             </div>
-            <div className="mb-3">
-                <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
-                <input type="password" className="form-control" value={password} id="exampleInputPassword1" onChange={(e) => setPassword(e.target.value)} name="password" />
-            </div>
-            {loading ? loadingBtn : <button type="submit" className="btn btn-primary">Submit</button>}
-            {method === "login" ? <p>not a user ? <a href="/register">register</a></p> : null}
-        </form>
+        </div>
     );
 }
 
