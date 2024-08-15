@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 export default function BlogMiniature(props) {
     const [followed, setFollowed] = useState(false);
-
+    console.log("blog of id: " + props.id + "is a friend : " + props.isFriend);
     const handleClick = (id) => {
         props.onFollow(id);
         setFollowed(true);

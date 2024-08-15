@@ -7,6 +7,7 @@ import { Error, Alert, Success } from "../components/Error";
 export default function Home() {
     const [blogs, setBlogs] = useState([])
     const [error, setError] = useState('')
+    const [success, setSuccess] = useState("")
     const [user, setUser] = useState({})
     const [activeTab, setActiveTab] = useState('featured')
     const [page, setPage] = useState(1)
@@ -80,7 +81,7 @@ export default function Home() {
             const response = await api.post(`/api/friendships/${id}/`);
             if (response.status === 201) {
                 setFriendIds([...friendIds, id]);
-                setModalMessage("Successfully followed!");
+                setSuccess("Successfully followed!");
                 setShowModal(true);
             } else {
                 setError(response.data.detail || "An error occurred while following the user.");
@@ -89,15 +90,15 @@ export default function Home() {
             setError(error.response?.data?.detail || error.toString());
         }
     };
-
+    console.log("freindsId : " + friendIds)
     return (<> 
         <Nav name='/home'
             profile_picture={user.profile_picture}
             username={user.user} 
             email={user.email}
         />
-        {error && <Success error={error} />}
-        
+        {error && <Alert error={error} />}
+        {success && <Success error={success} />}
         <div className="container mt-4">
             <div className="row justify-content-center">
                 <div className="col-md-6">
@@ -132,7 +133,7 @@ export default function Home() {
                 created_at={blog.created_at}
                 id={blog.author}
                 FeaturedPage={activeTab === 'featured'}
-                isFriend={friendIds.includes(blog.author)}
+                isFriend={friendIds.includes(blog.author_username) || blog.author_username == user.user}
                 onFollow={handleFollow}
             />
         ))}
