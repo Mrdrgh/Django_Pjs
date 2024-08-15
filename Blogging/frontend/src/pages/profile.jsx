@@ -13,6 +13,21 @@ export default function Profile() {
     const [searchTerm, setSearchTerm] = useState("");
     const [loading, setLoading] = useState(true);
     const searchInputRef = useRef(null);
+    const [showUpdateModal, setShowUpdateModal] = useState(false);
+    const [updateProfile, setUpdateProfile] = useState({
+        username: "",
+        password: "",
+        update_password: "",
+        profile_picture: null,
+        bio: ""
+    });
+    const [showBlogModal, setShowBlogModal] = useState(false);
+    const [blogAction, setBlogAction] = useState("add"); // "add" or "update"
+    const [selectedBlog, setSelectedBlog] = useState(null);
+    const [newBlog, setNewBlog] = useState({
+        title: "",
+        content: ""
+    });
 
     const handleRemoveFriend = async (friendId) => {
         try {
@@ -61,6 +76,114 @@ export default function Profile() {
         }
     }, [showFriendsModal]);
 
+
+
+    const handleBlogSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            if (blogAction === "add") {
+                const response = await api.post("/api/blogs/", newBlog);
+                setBlogs([...blogs, response.data]);
+            } else if (blogAction === "update") {
+                const response = await api.patch(`/api/blogs/update/${selectedBlog.id}/`, newBlog);
+                setBlogs(blogs.map(blog => blog.id === selectedBlog.id ? response.data : blog));
+            }
+            setShowBlogModal(false);
+            setNewBlog({ title: "", content: "" });
+            setSelectedBlog(null);
+        } catch (error) {
+            setError("Failed to " + blogAction + " blog: " + error.toString());
+        }
+    };
+
+    const handleDeleteBlog = async (blogId) => {
+        try {
+            await api.delete(`/api/blogs/delete/${blogId}/`);
+            setBlogs(blogs.filter(blog => blog.id !== blogId));
+        } catch (error) {
+            setError("Failed to delete blog: " + error.toString());
+        }
+    };
+
+    const openUpdateBlogModal = (blog) => {
+        setSelectedBlog(blog);
+        setNewBlog({ title: blog.title, content: blog.content });
+        setBlogAction("update");
+        setShowBlogModal(true);
+    };
+
+    function BlogModal() {
+        return (
+            <div className={`modal fade ${showBlogModal ? 'show' : ''}`} style={{display: showBlogModal ? 'block' : 'none'}} tabIndex="-1">
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title">{blogAction === "add" ? "Add New Blog" : "Update Blog"}</h5>
+                            <button type="button" className="btn-close" onClick={() => setShowBlogModal(false)}></button>
+                        </div>
+                        <div className="modal-body">
+                            <form onSubmit={handleBlogSubmit}>
+                                <div className="mb-3">
+                                    <label htmlFor="blogTitle" className="form-label">Title</label>
+                                    <input 
+                                        type="text" 
+                                        className="form-control" 
+                                        id="blogTitle" 
+                                        value={newBlog.title}
+                                        onChange={(e) => setNewBlog({...newBlog, title: e.target.value})}
+                                        required
+                                    />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="blogContent" className="form-label">Content</label>
+                                    <textarea 
+                                        className="form-control" 
+                                        id="blogContent" 
+                                        rows="3"
+                                        value={newBlog.content}
+                                        onChange={(e) => setNewBlog({...newBlog, content: e.target.value})}
+                                        required
+                                    ></textarea>
+                                </div>
+                                <button type="submit" className="btn btn-primary">{blogAction === "add" ? "Add Blog" : "Update Blog"}</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+
+
+    const handleUpdateSubmit = async (e) => {
+        e.preventDefault();
+        const formData = new FormData();
+        for (const key in updateProfile) {
+            if (updateProfile[key]) {
+                formData.append(key, updateProfile[key]);
+            }
+        }
+        try {
+            const response = await api.patch("/api/profile/", formData, {
+                headers: { "Content-Type": "multipart/form-data" }
+            });
+            setProfile(response.data);
+            setShowUpdateModal(false);
+        } catch (error) {
+            setError("Failed to update profile: " + error.toString());
+        }
+    };
+
+    const handleUpdateChange = (e) => {
+        const { name, value, files } = e.target;
+        if (name === "profile_picture" && files[0]) {
+            setUpdateProfile(prev => ({ ...prev, [name]: files[0] }));
+        } else {
+            setUpdateProfile(prev => ({ ...prev, [name]: value }));
+        }
+    };
+
     const LoadingTemplate = () => (
         <div className="text-center my-5">
             <div className="spinner-border text-primary" role="status">
@@ -70,6 +193,47 @@ export default function Profile() {
         </div>
     );
 
+
+
+    function UpdateProfileModal() {
+        return (
+            <div className={`modal fade ${showUpdateModal ? 'show' : ''}`} style={{display: showUpdateModal ? 'block' : 'none'}} tabIndex="-1">
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title">Update Profile</h5>
+                            <button type="button" className="btn-close" onClick={() => setShowUpdateModal(false)}></button>
+                        </div>
+                        <div className="modal-body">
+                            <form onSubmit={handleUpdateSubmit}>
+                                <div className="mb-3">
+                                    <label htmlFor="username" className="form-label">Username</label>
+                                    <input type="text" className="form-control" id="username" name="username" value={updateProfile.username} onChange={handleUpdateChange} />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="password" className="form-label">Password</label>
+                                    <input type="password" className="form-control" id="password" name="password" value={updateProfile.password} onChange={handleUpdateChange} />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="update_password" className="form-label">Update Password</label>
+                                    <input type="password" className="form-control" id="update_password" name="update_password" value={updateProfile.update_password} onChange={handleUpdateChange} />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="profile_picture" className="form-label">Profile Picture</label>
+                                    <input type="file" className="form-control" id="profile_picture" name="profile_picture" onChange={handleUpdateChange} />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="bio" className="form-label">Bio</label>
+                                    <textarea className="form-control" id="bio" name="bio" value={updateProfile.bio} onChange={handleUpdateChange}></textarea>
+                                </div>
+                                <button type="submit" className="btn btn-primary">Update Profile</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
     function FriendsModal() {
         return (
         <div className={`modal fade ${showFriendsModal ? 'show' : ''}`} style={{display: showFriendsModal ? 'block' : 'none'}} tabIndex="-1">
@@ -114,58 +278,95 @@ export default function Profile() {
 
     return (
         <>
-            <Nav name={'/profile'}
-            />
+        <Nav name={'/profile'} />
 
-            {error && <div className="alert alert-danger" role="alert">Error: {error}</div>}
+{error && <div className="alert alert-danger" role="alert">Error: {error}</div>}
 
-            <div className="container mt-4">
-                <div className="row">
-                    {/* User Profile Section */}
-                    <div className="col-lg-4">
-                        <div className="profile-section mb-4">
-                            <div className="profile-pic-container mx-auto mb-3">
-                                <img src={profile.profile_picture} className="img-fluid profile-pic" alt="Profile" />
-                            </div>
-                            <h1 className="h4 text-center mb-2">{profile.user}</h1>
-                            {
-                                profile.bio ? <div className="bio-box shadow-box p-3">
-                                <p>{profile.bio}</p>
-                            </div> : ""
-                            }
-                        </div>
-
-                        {/* Friends Section */}
-                        <div className="friends-section">
-                            <button 
-                                className="btn btn-primary mb-3 w-100"
-                                onClick={() => setShowFriendsModal(true)}
-                            >
-                                Show Friends ({friends.length})
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* Blogs Section */}
-                    <div className="col-lg-8">
-                        <h2 className="blogs-header">Blogs</h2>
-                        <div className="blogs-container">
-                            {blogs.length > 0 ? (
-                                blogs.map((item) => (
-                                    <div key={item.id} className="card mb-3 shadow-box">
-                                        <div className="card-body">
-                                            <h3 className="card-title blog-title">{item.title} <p>{item.created_at}</p></h3>
-                                            <p className="card-text">{item.content}</p>
-                                        </div>
-                                    </div>
-                                ))
-                            ) : <Alert error={"no blogs to show"} /> }
-                        </div>
+<div className="container mt-4">
+    <div className="row">
+        {/* User Profile Section */}
+        <div className="col-lg-4">
+            <div className="profile-section mb-4">
+                <div className="profile-pic-container mx-auto mb-3">
+                    <img src={profile.profile_picture} className="img-fluid profile-pic" alt="Profile" />
+                    <div className="d-flex justify-content-between align-items-center mt-2">
+                        <h1 className="h4 mb-0">{profile.user}</h1>
+                        <button 
+                            className="btn btn-primary"
+                            onClick={() => setShowUpdateModal(true)}
+                        >
+                            Update
+                        </button>
                     </div>
                 </div>
+                {
+                    profile.bio ? <div className="bio-box shadow-box p-3" style={{marginTop: '100px'}}>
+                    <p>{profile.bio}</p>
+                </div> : ""
+                }
             </div>
 
-            {FriendsModal()}
+            {/* Friends Section */}
+            <div className="friends-section">
+                <button 
+                    className="btn btn-primary mb-3 w-100"
+                    onClick={() => setShowFriendsModal(true)}
+                >
+                    Show Friends ({friends.length})
+                </button>
+            </div>
+        </div>
+
+        {/* Blogs Section */}
+        <div className="col-lg-8">
+            <div className="d-flex justify-content-between align-items-center mb-3">
+                <h2 className="blogs-header">Blogs</h2>
+                <button 
+                    className="btn btn-primary"
+                    onClick={() => {
+                        setBlogAction("add");
+                        setNewBlog({ title: "", content: "" });
+                        setShowBlogModal(true);
+                    }}
+                >
+                    Add New Blog
+                </button>
+            </div>
+            <div className="blogs-container">
+                {blogs.length > 0 ? (
+                    blogs.map((item) => (
+                        <div key={item.id} className="card mb-3 shadow-box">
+                            <div className="card-body">
+                                <h3 className="card-title blog-title">{item.title}</h3>
+                                <p className="card-text">{item.content}</p>
+                                <p className="text-muted">{item.created_at}</p>
+                                <div className="d-flex justify-content-end">
+                                    <button 
+                                        className="btn btn-sm btn-outline-primary me-2"
+                                        onClick={() => openUpdateBlogModal(item)}
+                                    >
+                                        Update
+                                    </button>
+                                    <button 
+                                        className="btn btn-sm btn-outline-danger"
+                                        onClick={() => handleDeleteBlog(item.id)}
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    ))
+                ) : <Alert error={"no blogs to show"} /> }
+            </div>
+        </div>
+    </div>
+</div>
+
+{FriendsModal()}
+{UpdateProfileModal()}
+{BlogModal()}
+
 
             <style>
                 {`
