@@ -52,7 +52,7 @@ class BlogListCreate(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         if serializer.is_valid():
-            serializer.save(author=self.request.user.username)
+            serializer.save(author=self.request.user)
         else:
             print(serializer.error)
 
