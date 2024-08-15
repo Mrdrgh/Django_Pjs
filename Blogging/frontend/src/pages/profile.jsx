@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import api from "../api";
 import Nav from "./navbar";
+import { Alert } from "../components/Error";
 //TODO add update and delete blog options
 export default function Profile() {
     const [profile, setProfile] = useState({});
@@ -127,9 +128,11 @@ export default function Profile() {
                                 <img src={profile.profile_picture} className="img-fluid profile-pic" alt="Profile" />
                             </div>
                             <h1 className="h4 text-center mb-2">{profile.user}</h1>
-                            <div className="bio-box shadow-box p-3">
+                            {
+                                profile.bio ? <div className="bio-box shadow-box p-3">
                                 <p>{profile.bio}</p>
-                            </div>
+                            </div> : ""
+                            }
                         </div>
 
                         {/* Friends Section */}
@@ -156,9 +159,7 @@ export default function Profile() {
                                         </div>
                                     </div>
                                 ))
-                            ) : (
-                                <p>No blogs to show.</p>
-                            )}
+                            ) : <Alert error={"no blogs to show"} /> }
                         </div>
                     </div>
                 </div>

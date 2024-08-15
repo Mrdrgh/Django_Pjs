@@ -32,9 +32,6 @@ function Form({ route, method }) {
             
             if (method !== "login") {
                 formData.append("email", email);
-                if (profilePicture) {
-                    formData.append("profile_picture", profilePicture);
-                }
             }
 
             const response = await api.post(route, formData, {
@@ -73,7 +70,7 @@ function Form({ route, method }) {
             <div className="card p-4 shadow" style={{ width: '100%', maxWidth: '500px', borderRadius: '15px' }}>
                 <form className="form" onSubmit={handleSubmit}>
                     <h1 className="text-center mb-4">{method === "login" ? "Login" : "Register"}</h1>
-                    {error && <Error error={error}/>}
+                    {error ? <Error error={error}/> : ''}
                     <div className="mb-3">
                         <label htmlFor="username" className="form-label">Username</label>
                         <input 

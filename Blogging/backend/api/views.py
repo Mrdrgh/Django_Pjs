@@ -19,7 +19,8 @@ class CreateUserView(generics.CreateAPIView):
             Profile.objects.create(
                 user=user,
                 bio='',
-                username=user.username
+                username=user.username,
+                profile_picture="profile_pictures/Blanc.jpg",
             )
         else:
             print(serializer.error)

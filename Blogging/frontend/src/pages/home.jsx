@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Nav from "./navbar";
 import api from "../api";
 import BlogMiniature from "./myBlogs";
-import { Error, Alert, Success } from "../components/Error";
+import { Error, Success } from "../components/Error";
 
 export default function Home() {
     const [blogs, setBlogs] = useState([])
@@ -90,15 +90,14 @@ export default function Home() {
             setError(error.response?.data?.detail || error.toString());
         }
     };
-    console.log("freindsId : " + friendIds)
     return (<> 
         <Nav name='/home'
             profile_picture={user.profile_picture}
             username={user.user} 
             email={user.email}
         />
-        {error && <Alert error={error} />}
-        {success && <Success error={success} />}
+        {error && <Error error={error} />}
+        {success && <Success error={success}/>}
         <div className="container mt-4">
             <div className="row justify-content-center">
                 <div className="col-md-6">
