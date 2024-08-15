@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Nav from "./navbar";
 import api from "../api";
 import BlogMiniature from "./myBlogs";
+import { Error, Alert, Success } from "../components/Error";
 
 export default function Home() {
     const [blogs, setBlogs] = useState([])
@@ -95,46 +96,46 @@ export default function Home() {
             username={user.user} 
             email={user.email}
         />
-        {error && <div className="alert alert-danger" role="alert">{error}</div>}
+        {error && <Success error={error} />}
         
         <div className="container mt-4">
-    <div className="row justify-content-center">
-        <div className="col-md-6">
-            <ul className="nav nav-pills nav-fill mb-4">
-                <li className="nav-item">
-                    <button 
-                        onClick={() => handleTabChange('featured')} 
-                        className={`nav-link ${activeTab === 'featured' ? 'active' : ''}`}
-                    >
-                        Featured
-                    </button>
-                </li>
-                <li className="nav-item">
-                    <button 
-                        onClick={() => handleTabChange('following')} 
-                        className={`nav-link ${activeTab === 'following' ? 'active' : ''}`}
-                    >
-                        Following
-                    </button>
-                </li>
-                </ul>
+            <div className="row justify-content-center">
+                <div className="col-md-6">
+                    <ul className="nav nav-pills nav-fill mb-4">
+                        <li className="nav-item">
+                            <button 
+                                onClick={() => handleTabChange('featured')} 
+                                className={`nav-link ${activeTab === 'featured' ? 'active' : ''}`}
+                            >
+                                Featured
+                            </button>
+                        </li>
+                        <li className="nav-item">
+                            <button 
+                                onClick={() => handleTabChange('following')} 
+                                className={`nav-link ${activeTab === 'following' ? 'active' : ''}`}
+                            >
+                                Following
+                            </button>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
 
-    {blogs.map((blog) => (
-                <BlogMiniature
-                    key={blog.id}
-                    title={blog.title}
-                    author={blog.author_username}
-                    content={blog.content}
-                    created_at={blog.created_at}
-                    id={blog.author}
-                    FeaturedPage={activeTab === 'featured'}
-                    isFriend={friendIds.includes(blog.author)}
-                    onFollow={handleFollow}
-                />
-            ))}
+        {blogs.map((blog) => (
+            <BlogMiniature
+                key={blog.id}
+                title={blog.title}
+                author={blog.author_username}
+                content={blog.content}
+                created_at={blog.created_at}
+                id={blog.author}
+                FeaturedPage={activeTab === 'featured'}
+                isFriend={friendIds.includes(blog.author)}
+                onFollow={handleFollow}
+            />
+        ))}
 
         {activeTab == 'featured' && hasMore && (
             <button onClick={loadMore}>Load More</button>

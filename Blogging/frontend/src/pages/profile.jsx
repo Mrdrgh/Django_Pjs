@@ -15,7 +15,7 @@ export default function Profile() {
 
     const handleRemoveFriend = async (friendId) => {
         try {
-            await api.delete(`/api/friendships/${friendId}/`);
+            await api.delete(`/api/friendships/delete/${friendId}/`);
             setFriends(friends.filter(friend => friend.id !== friendId));
             setFilteredFriends(filteredFriends.filter(friend => friend.id !== friendId));
         } catch (error) {

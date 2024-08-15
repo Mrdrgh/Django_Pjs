@@ -11,5 +11,5 @@ urlpatterns = [
     path('user_blogs/', UserBlogsList.as_view(), name='user_blogs'),
     path('friendships/', FriendshipListCreate.as_view()),
     path('friendships/<int:pk>/', FriendshipCreate.as_view()),
-    path('friendships/<int:pk>/', FriendshipDelete.as_view()),
+    path('friendships/delete/<int:pk>/', FriendshipDelete.as_view()),
 ]

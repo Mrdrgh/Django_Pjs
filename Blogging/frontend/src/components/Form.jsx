@@ -2,6 +2,7 @@ import { useState } from "react";
 import api from "../api";
 import { useNavigate } from "react-router-dom";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
+import { Error } from "./Error";
 import "../styles/Form.css";
 
 function Form({ route, method }) {
@@ -72,7 +73,7 @@ function Form({ route, method }) {
             <div className="card p-4 shadow" style={{ width: '100%', maxWidth: '500px', borderRadius: '15px' }}>
                 <form className="form" onSubmit={handleSubmit}>
                     <h1 className="text-center mb-4">{method === "login" ? "Login" : "Register"}</h1>
-                    {error && <div className="alert alert-danger" role="alert">{error}</div>}
+                    {error && <Error error={error}/>}
                     <div className="mb-3">
                         <label htmlFor="username" className="form-label">Username</label>
                         <input 
