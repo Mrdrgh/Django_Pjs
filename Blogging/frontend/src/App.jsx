@@ -1,11 +1,12 @@
 import { useState } from 'react'
-import {BrowserRouter, Route, Routes, Navigate} from 'react-router-dom'
+import {BrowserRouter, Route, Routes, Navigate, useLocation} from 'react-router-dom'
 import Login from './pages/login'
 import Register from './pages/register'
 import Notfound from './pages/NotFound'
 import ProtectedRoute from './components/ProtectedRoute'
 import Home from './pages/home'
 import Profile from './pages/profile'
+import Blog from './pages/Blog'
 
 function RegisterLogout() {
     localStorage.clear()
@@ -19,6 +20,11 @@ function Logout() {
     return <Navigate to='/login' />;
 }
 
+function BlogWrapper() {
+  const location = useLocation();
+  return <Blog {...location.state} />;
+}
+
 function App() {
     return (<>
         <BrowserRouter>
@@ -27,6 +33,7 @@ function App() {
                 <Route path='/register' element={<RegisterLogout />} />
                 <Route path='*' element={<Notfound />} />
                 <Route path='/logout' element={<Logout />} />
+                <Route path='/blog' element={<BlogWrapper />} />
                 <Route path='/' element={
                     <ProtectedRoute>
                         <Home />
