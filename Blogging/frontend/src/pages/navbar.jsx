@@ -11,7 +11,7 @@ export default function Nav(props) {
             <nav className="navbar navbar-expand-md navbar-light bg-light">
                 <div className="container-fluid">
                     <a className="navbar-brand d-flex align-items-center" href="/">
-                        <img src="https://flowbite.com/docs/images/logo.svg" alt="Flowbite Logo" width="30" height="24" className="d-inline-block align-text-top me-2" />
+                        <img src="/b(1).png" alt="Flowbite Logo" width="38" height="38" className="d-inline-block align-text-top me-2" />
                         <span className="fs-4 fw-semibold">Blogging</span>
                     </a>
 
@@ -31,6 +31,9 @@ export default function Nav(props) {
                                     <a className="nav-link" href="/register">Register</a>
                                 </li>
                             )}
+                            <li className="nav-item">
+                                <a className="nav-link" href="https://github.com/Mrdrgh/Django_Pjs/tree/main/Blogging" target="blanc">Source Code</a>
+                            </li>
                         </ul>
                         
                         {is_auth && (

@@ -15,9 +15,6 @@ export default function Profile() {
     const searchInputRef = useRef(null);
     const [showUpdateModal, setShowUpdateModal] = useState(false);
     const [updateProfile, setUpdateProfile] = useState({
-        username: "",
-        password: "",
-        update_password: "",
         profile_picture: null,
         bio: ""
     });
@@ -206,18 +203,6 @@ export default function Profile() {
                         </div>
                         <div className="modal-body">
                             <form onSubmit={handleUpdateSubmit}>
-                                <div className="mb-3">
-                                    <label htmlFor="username" className="form-label">Username</label>
-                                    <input type="text" className="form-control" id="username" name="username" value={updateProfile.username} onChange={handleUpdateChange} />
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="password" className="form-label">Password</label>
-                                    <input type="password" className="form-control" id="password" name="password" value={updateProfile.password} onChange={handleUpdateChange} />
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="update_password" className="form-label">Update Password</label>
-                                    <input type="password" className="form-control" id="update_password" name="update_password" value={updateProfile.update_password} onChange={handleUpdateChange} />
-                                </div>
                                 <div className="mb-3">
                                     <label htmlFor="profile_picture" className="form-label">Profile Picture</label>
                                     <input type="file" className="form-control" id="profile_picture" name="profile_picture" onChange={handleUpdateChange} />
