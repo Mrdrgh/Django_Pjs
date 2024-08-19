@@ -1,5 +1,5 @@
 # Blogging App
-![Blogging](https://github.com/Mrdrgh/Django_Pjs/blob/main/Blogging/frontend/public/b(2).png)
+![Blogging](https://github.com/Mrdrgh/Django_Pjs/blob/main/Blogging/frontend/public/b(2).png)<br>
 this is a blogging app built using the Django Rest Framework to make the API, JWTs, Axios Interceptor, and React js, users can register, login, make blogs, update or delete them, users can also follow friends to see their blogs on the Featured page, they can also manage their Follows in the Profile, as well as updating the Bio and the Profile Picture.
 
 ## Requirements
