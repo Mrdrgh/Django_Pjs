@@ -11,7 +11,7 @@ export default function Nav(props) {
             <nav className="navbar navbar-expand-md navbar-light bg-light">
                 <div className="container-fluid">
                     <a className="navbar-brand d-flex align-items-center" href="/">
-                        <img src="/b(2)-vmake.png.png" alt="Flowbite Logo" width="38" height="38" className="d-inline-block align-text-top me-2" />
+                        <img src="/b(2)-vmake.png" alt="Flowbite Logo" width="38" height="38" className="d-inline-block align-text-top me-2" />
                         <span className="fs-4 fw-semibold">Blogging</span>
                     </a>
 
