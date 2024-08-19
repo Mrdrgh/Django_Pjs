@@ -23,5 +23,7 @@ this is a blogging app built using the Django Rest Framework to make the API, JW
 
 ## Contributions
 any one is welcome to contribute.
+## For Roadmaps.sh
+this is the url: https://roadmap.sh/projects/blogging-platform-api
 ## Authors:
 - Mohammed Darghal <mohammed.darghal.23@ump.ac.ma>.
